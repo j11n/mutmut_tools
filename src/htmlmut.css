@@ -1,0 +1,41 @@
+
+p {
+    display: block; 
+    width: 100%; 
+    min-height: 1.25em; 
+    line-height: 1.25; 
+    margin: 1px; 
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+    white-space: pre-wrap;
+}
+p.mt {
+    font-style: italic;
+}
+p.bgred {
+    background-color: #FFE0E0;
+}
+p.bgorange {
+    background-color: lightcoral;
+}
+p.bggray {
+    background-color: lightgray;
+}
+p.bggreen {
+    background-color: #E0FFE0;
+}
+div.mts {
+    border: 1px solid lightgray;
+    font-style: italic;
+}
+.k { color: blue; }
+.n { color: green; }
+.s { color: green; }
+.r { color: red; float: right; }
+.c { color: darkgrey; }
+.ln { background-color: lightgray; text-align: right; }
+.txtred { color: red; }
+.txtorange { color: orange; }
+.txtgray { color: gray; }
+.txtgreen { color: green; }
