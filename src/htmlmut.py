@@ -295,7 +295,7 @@ def create_html_from_source(hl_code, line2mutations, report_path):
             )
         else:
             mut = ''
-        result += f'<p><span class="ln">{line_no:{ln_w}} </span>{line}{mut}</p>\n'
+        result += f'<p><span class="ln">{line_no + 1:{ln_w}} </span>{line}{mut}</p>\n'
         result += muts
     output = html_content.format(highlighted_code=result)
 
