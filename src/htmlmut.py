@@ -51,6 +51,11 @@ html_content = """<!DOCTYPE html>
 </html>
 """
 
+BG_RED = 'bgred'
+BG_ORANGE = 'bgorange'
+BG_GRAY = 'bggray'
+BG_GREEN = 'bggreen'
+
 
 MUTANT_STATUS2TEXT = {
     BAD_SURVIVED: 'Survivied',
@@ -62,30 +67,35 @@ MUTANT_STATUS2TEXT = {
 }
 
 MUTANT_STATUS2BG = {
-    BAD_SURVIVED: 'bgred',
-    BAD_TIMEOUT: 'bgorange',
-    SKIPPED: 'bgray',
-    UNTESTED: 'bgred',
-    OK_SUSPICIOUS: 'bggreen',
-    OK_KILLED: 'bggreen',
+    BAD_SURVIVED: BG_RED,
+    BAD_TIMEOUT: BG_ORANGE,
+    SKIPPED: BG_GRAY,
+    UNTESTED: BG_RED,
+    OK_SUSPICIOUS: BG_GREEN,
+    OK_KILLED: BG_GREEN,
 }
 
 COMBINE_BGS = {
-    'bgred': {'bgred': 'bgred', 'bgorange': 'bgred', 'bggray': 'bgred', 'bggreen': 'bgred'},
-    'bgorange': {
-        'bgred': 'bgred',
-        'bgorange': 'bgorange',
-        'bggray': 'bgorange',
-        'bggreen': 'bgorange',
+    BG_RED: {BG_RED: BG_RED, BG_ORANGE: BG_RED, BG_GRAY: BG_RED, BG_GREEN: BG_RED},
+    BG_ORANGE: {
+        BG_RED: BG_RED,
+        BG_ORANGE: BG_ORANGE,
+        BG_GRAY: BG_ORANGE,
+        BG_GREEN: BG_ORANGE,
     },
-    'bgray': {'bgred': 'bgred', 'bgorange': 'bgorange', 'bggray': 'bggray', 'bggreen': 'bggreen'},
-    'bggreen': {
-        'bgred': 'bgred',
-        'bgorange': 'bgorange',
-        'bggray': 'bggreen',
-        'bggreen': 'bggreen',
+    BG_GRAY: {BG_RED: BG_RED, BG_ORANGE: BG_ORANGE, BG_GRAY: BG_GRAY, BG_GREEN: BG_GREEN},
+    BG_GREEN: {
+        BG_RED: BG_RED,
+        BG_ORANGE: BG_ORANGE,
+        BG_GRAY: BG_GREEN,
+        BG_GREEN: BG_GREEN,
     },
 }
+
+
+def create_gitignore(path):
+    fp = path / '.gitignore'
+    fp.write_text('# Created by htmlmut.py\n*\n')
 
 
 def begin_indent(line, start, last_pos):
@@ -231,6 +241,7 @@ def create_html_report(dict_synonyms, directory):
     for name in ('htmlmut.js', 'htmlmut.css'):
         new_name = copy_file_to_hashed_name(this_dir_path / name, dir_path)
         html_content = html_content.replace(name, new_name.name)
+    create_gitignore(dir_path)
 
     index_data = [
         '<h1>Mutation files</h1>',
@@ -271,14 +282,14 @@ def create_html_from_source(hl_code, line2mutations, report_path):
     for line in hl_code:
         line_no += 1
         muts = ''
-        txt_cls = 'bggreen'
+        txt_cls = BG_GRAY
         if line_no in line2mutations:
             index = 0
             muts += f'<div class="mts" id="d{line_no}" style="display: none;">\n'
             for mutant, item in line2mutations[line_no]:
                 st = MUTANT_STATUS2TEXT.get(mutant.status, '--ERROR--')
-                bg = MUTANT_STATUS2BG.get(mutant.status, 'bgred')
-                txt_cls = COMBINE_BGS.get(txt_cls, {}).get(bg, 'bgred')
+                bg = MUTANT_STATUS2BG.get(mutant.status, BG_RED)
+                txt_cls = COMBINE_BGS.get(txt_cls, {}).get(bg, BG_RED)
                 mut_no += 1
                 hl_item = highlight_code(item)
                 muts += (
